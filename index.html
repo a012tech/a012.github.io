@@ -21,4 +21,45 @@
             padding: 0;
         }
         h1 {
-            font-size
+            font-size: 2.5em;
+            font-weight: 600;
+            text-align: center;
+            letter-spacing: 0.05em;
+            line-height: 1.4;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: .15em solid #ffffff;
+            animation: typing 4s steps(30, end), blink-caret .75s step-end infinite;
+        }
+        footer {
+            position: absolute;
+            bottom: 10px;
+            font-size: 0.9em;
+            color: #aaaaaa;
+            text-align: center;
+            width: 100%;
+        }
+        footer a {
+            color: #888888;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: #ffffff; }
+        }
+    </style>
+</head>
+<body>
+    <h1>零一二科技，让有趣便捷的疗愈方式变得更加普及</h1>
+    <footer>
+        <a href="http://beian.miit.gov.cn/" target="_blank">备案号：沪ICP备2024067495号-2</a>
+    </footer>
+</body>
+</html>
