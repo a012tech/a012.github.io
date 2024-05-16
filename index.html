@@ -22,25 +22,22 @@
             padding: 0;
         }
         h1 {
-            font-size: 48px; /* Set to fixed size as recommended for desktop */
+            font-size: 2.5em;
             font-weight: 600;
             text-align: center;
             letter-spacing: 0.05em;
             line-height: 1.4;
-            margin: 0;
-            padding: 0 10px;
+            white-space: nowrap;
             overflow: hidden;
-            border-right: .15em solid transparent; /* Make the cursor invisible */
-            animation: typing 6s steps(40, end) 1s forwards;
+            animation: typing 6s steps(40, end);
         }
         footer {
-            position: fixed;
-            bottom: 0;
-            font-size: 16px; /* Fixed font size for better readability */
+            position: absolute;
+            bottom: 18px;
+            font-size: 0.9em;
             color: #aaaaaa;
             text-align: center;
             width: 100%;
-            padding: 10px 0;
         }
         footer a {
             color: #888888;
@@ -53,23 +50,16 @@
             from { width: 0; }
             to { width: 100%; }
         }
-        /* Responsive adjustments for mobile */
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 24px; /* Smaller font size for mobile */
-            }
-            body {
-                font-size: 14px;
-                padding: 10px;
-            }
-            footer {
-                font-size: 12px; /* Smaller font size for footer on mobile */
-            }
+        @media (max-width: 768px) {
+            h1 { font-size: 1.25em; } /* 为手机端减小字体大小 */
+        }
+        @media (min-width: 769px) and (max-width: 1024px) {
+            h1 { font-size: 1.875em; } /* 为iPad端减小字体大小 */
         }
     </style>
 </head>
 <body>
-    <h1>零一二科技，让有趣便捷的疗愈方式变得更加普及</h1>
+    <h1 class="typed-text">零一二科技，让有趣便捷的疗愈方式变得更加普及</h1>
     <footer>
         <a href="http://beian.miit.gov.cn/" target="_blank">备案号：沪ICP备2024067495号-2</a>
     </footer>
