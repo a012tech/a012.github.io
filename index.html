@@ -22,24 +22,25 @@
             padding: 0;
         }
         h1 {
-            font-size: 2.5em;
+            font-size: 48px; /* Set to fixed size as recommended for desktop */
             font-weight: 600;
             text-align: center;
             letter-spacing: 0.05em;
             line-height: 1.4;
-            padding: 0 10px; /* Add padding to prevent overflow */
+            margin: 0;
+            padding: 0 10px;
             overflow: hidden;
-            border-right: .15em solid #ffffff;
-            animation: typing 6s steps(40, end), blink-caret .75s step-end infinite;
+            border-right: .15em solid transparent; /* Make the cursor invisible */
+            animation: typing 6s steps(40, end) 1s forwards;
         }
         footer {
             position: fixed;
             bottom: 0;
-            font-size: 0.9em;
+            font-size: 16px; /* Fixed font size for better readability */
             color: #aaaaaa;
             text-align: center;
             width: 100%;
-            padding: 10px 0; /* Add padding for better visibility */
+            padding: 10px 0;
         }
         footer a {
             color: #888888;
@@ -52,36 +53,23 @@
             from { width: 0; }
             to { width: 100%; }
         }
-        @keyframes blink-caret {
-            from, to { border-color: transparent; }
-            50% { border-color: #ffffff; }
-        }
-        .typed-text::after {
-            content: '';
-            display: inline-block;
-            width: .15em;
-            height: 1em;
-            background-color: #ffffff;
-            margin-left: 2px;
-            animation: blink-caret .75s step-end infinite;
-        }
-        /* Responsive adjustments */
+        /* Responsive adjustments for mobile */
         @media (max-width: 600px) {
             h1 {
-                font-size: 1.5em;
+                font-size: 24px; /* Smaller font size for mobile */
             }
             body {
-                font-size: 14px; /* Adjust font size for smaller screens */
-                padding: 10px; /* Add padding for smaller screens */
+                font-size: 14px;
+                padding: 10px;
             }
             footer {
-                font-size: 0.8em;
+                font-size: 12px; /* Smaller font size for footer on mobile */
             }
         }
     </style>
 </head>
 <body>
-    <h1 class="typed-text">零一二科技，让有趣便捷的疗愈方式变得更加普及</h1>
+    <h1>零一二科技，让有趣便捷的疗愈方式变得更加普及</h1>
     <footer>
         <a href="http://beian.miit.gov.cn/" target="_blank">备案号：沪ICP备2024067495号-2</a>
     </footer>
