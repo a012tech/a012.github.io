@@ -2,6 +2,7 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>零一二科技</title>
     <style>
         @font-face {
@@ -26,18 +27,19 @@
             text-align: center;
             letter-spacing: 0.05em;
             line-height: 1.4;
-            white-space: nowrap;
+            padding: 0 10px; /* Add padding to prevent overflow */
             overflow: hidden;
             border-right: .15em solid #ffffff;
             animation: typing 6s steps(40, end), blink-caret .75s step-end infinite;
         }
         footer {
-            position: absolute;
-            bottom: 18px;
+            position: fixed;
+            bottom: 0;
             font-size: 0.9em;
             color: #aaaaaa;
             text-align: center;
             width: 100%;
+            padding: 10px 0; /* Add padding for better visibility */
         }
         footer a {
             color: #888888;
@@ -62,6 +64,19 @@
             background-color: #ffffff;
             margin-left: 2px;
             animation: blink-caret .75s step-end infinite;
+        }
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.5em;
+            }
+            body {
+                font-size: 14px; /* Adjust font size for smaller screens */
+                padding: 10px; /* Add padding for smaller screens */
+            }
+            footer {
+                font-size: 0.8em;
+            }
         }
     </style>
 </head>
