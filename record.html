@@ -50,7 +50,7 @@
                 const users = await response.json();
                 const userList = document.getElementById('userList');
                 userList.innerHTML = '';
-                users.forEach(user => {
+                users.data.forEach(user => { // Assumes 'data' contains the list of users
                     const li = document.createElement('li');
                     li.className = 'list-group-item';
                     li.innerText = `用户ID: ${user.id}`;
@@ -68,7 +68,7 @@
                 const conversations = await response.json();
                 const conversationList = document.getElementById('conversationList');
                 conversationList.innerHTML = '';
-                conversations.forEach(conversation => {
+                conversations.data.forEach(conversation => { // Assumes 'data' contains the list of conversations
                     const li = document.createElement('li');
                     li.className = 'list-group-item';
                     li.innerText = `对话ID: ${conversation.id} - AI回复次数: ${conversation.aiResponseCount}`;
@@ -85,7 +85,7 @@
                 const response = await fetch(`http://47.103.73.241/conversation/get-conversation-content?id=${conversationId}`);
                 const content = await response.json();
                 const conversationContent = document.getElementById('conversationContent');
-                conversationContent.innerHTML = `<h4>对话内容</h4><pre>${JSON.stringify(content, null, 2)}</pre>`;
+                conversationContent.innerHTML = `<h4>对话内容</h4><pre>${JSON.stringify(content.data, null, 2)}</pre>`; // Assumes 'data' contains the conversation content
             } catch (error) {
                 console.error('Error fetching conversation content:', error);
             }
