@@ -6,9 +6,18 @@
     <title>后台管理系统</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { padding-top: 20px; }
-        #login { display: block; }
-        #content { display: none; }
+        body {
+            padding: 80px;
+            font-family: 'PingFang SC', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+            font-weight: 600;
+            font-size: 20px;
+        }
+        #login {
+            display: block;
+        }
+        #content {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -50,7 +59,7 @@
                 const users = await response.json();
                 const userList = document.getElementById('userList');
                 userList.innerHTML = '';
-                users.forEach(user => { // 确保 users 是一个包含用户对象的数组
+                users.forEach(user => {
                     const li = document.createElement('li');
                     li.className = 'list-group-item';
                     li.innerText = `用户ID: ${user.id}`;
@@ -68,7 +77,7 @@
                 const conversations = await response.json();
                 const conversationList = document.getElementById('conversationList');
                 conversationList.innerHTML = '';
-                conversations.forEach(conversation => { // 确保 conversations 是一个包含对话对象的数组
+                conversations.forEach(conversation => {
                     const li = document.createElement('li');
                     li.className = 'list-group-item';
                     li.innerText = `对话ID: ${conversation.id} - AI回复次数: ${conversation.aiResponseCount}`;
