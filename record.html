@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户对话管理系统</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        #passwordPrompt, #mainContent {
+            display: none;
+        }
+        #passwordPrompt.active, #mainContent.active {
+            display: block;
+        }
+        #menu {
+            width: 300px;
+            border-right: 1px solid #ccc;
+            padding: 20px;
+            overflow-y: auto;
+            height: 100vh;
+        }
+        #menu ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #menu li {
+            margin: 10px 0;
+            cursor: pointer;
+        }
+        #content {
+            flex: 1;
+            padding: 20px;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="passwordPrompt">
+        <h2>请输入密码</h2>
+        <input type="password" id="passwordInput" placeholder="请输入密码">
+        <button onclick="checkPassword()">提交</button>
+        <p id="errorMessage" class="hidden">密码错误，请重试。</p>
+    </div>
+    <div id="mainContent">
+        <div id="menu">
+            <h2>对话记录</h2>
+            <ul id="conversationList">
+                <!-- 对话记录列表会动态生成 -->
+            </ul>
+        </div>
+        <div id="content">
+            <h2>对话内容</h2>
+            <div id="conversationContent">
+                <!-- 对话内容会动态生成 -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const correctPassword = 'a012.Liaobai.2024';
+
+        function checkPassword() {
+            const passwordInput = document.getElementById('passwordInput').value;
+            const errorMessage = document.getElementById('errorMessage');
+            if (passwordInput === correctPassword) {
+                document.getElementById('passwordPrompt').classList.remove('active');
+                document.getElementById('passwordPrompt').classList.add('hidden');
+                document.getElementById('mainContent').classList.add('active');
+                loadConversations();
+            } else {
+                errorMessage.classList.remove('hidden');
+            }
+        }
+
+        async function fetchConversations(userId) {
+            const response = await fetch(`http://47.103.73.241/conversation/get-user-conversation-record?userId=${userId}`);
+            return response.json();
+        }
+
+        async function fetchConversationContent(conversationId) {
+            const response = await fetch(`http://47.103.73.241/conversation/get-conversation-content?id=${conversationId}`);
+            return response.json();
+        }
+
+        function renderConversationList(conversations) {
+            const conversationList = document.getElementById('conversationList');
+            conversationList.innerHTML = '';
+            conversations.forEach(conversation => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `对话ID: ${conversation.id} (AI回复次数: ${conversation.aiReplyCount})`;
+                listItem.addEventListener('click', () => showConversationContent(conversation.id));
+                conversationList.appendChild(listItem);
+            });
+        }
+
+        async function showConversationContent(conversationId) {
+            const content = await fetchConversationContent(conversationId);
+            const conversationContent = document.getElementById('conversationContent');
+            conversationContent.innerHTML = '';
+            content.forEach(message => {
+                const messageElement = document.createElement('p');
+                messageElement.textContent = `${message.sender}: ${message.text}`;
+                conversationContent.appendChild(messageElement);
+            });
+        }
+
+        async function loadConversations() {
+            const userId = 2; // 替换为实际用户ID
+            const conversations = await fetchConversations(userId);
+            renderConversationList(conversations);
+        }
+    </script>
+</body>
+</html>
