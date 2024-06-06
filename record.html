@@ -3,115 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>用户对话管理系统</title>
+    <title>后台管理系统</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        #passwordPrompt, #mainContent {
-            display: none;
-        }
-        #passwordPrompt.active, #mainContent.active {
-            display: block;
-        }
-        #menu {
-            width: 300px;
-            border-right: 1px solid #ccc;
-            padding: 20px;
-            overflow-y: auto;
-            height: 100vh;
-        }
-        #menu ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        #menu li {
-            margin: 10px 0;
-            cursor: pointer;
-        }
-        #content {
-            flex: 1;
-            padding: 20px;
-        }
-        .hidden {
-            display: none;
-        }
+        body { padding-top: 20px; }
+        #login { display: none; }
+        #content { display: none; }
     </style>
 </head>
 <body>
-    <div id="passwordPrompt">
-        <h2>请输入密码</h2>
-        <input type="password" id="passwordInput" placeholder="请输入密码">
-        <button onclick="checkPassword()">提交</button>
-        <p id="errorMessage" class="hidden">密码错误，请重试。</p>
-    </div>
-    <div id="mainContent">
-        <div id="menu">
-            <h2>对话记录</h2>
-            <ul id="conversationList">
-                <!-- 对话记录列表会动态生成 -->
-            </ul>
+    <div class="container">
+        <div id="login">
+            <h2>请输入密码</h2>
+            <input type="password" id="password" class="form-control" placeholder="Password">
+            <button class="btn btn-primary mt-2" onclick="checkPassword()">登录</button>
         </div>
-        <div id="content">
-            <h2>对话内容</h2>
-            <div id="conversationContent">
-                <!-- 对话内容会动态生成 -->
+        <div id="content" class="row">
+            <div class="col-3">
+                <h3>用户列表</h3>
+                <ul id="userList" class="list-group"></ul>
+            </div>
+            <div class="col-9">
+                <h3>对话记录</h3>
+                <ul id="conversationList" class="list-group"></ul>
+                <div id="conversationContent" class="mt-4"></div>
             </div>
         </div>
     </div>
-
     <script>
-        const correctPassword = 'a012.Liaobai.2024';
+        const PASSWORD = 'a012.liaobai';
 
         function checkPassword() {
-            const passwordInput = document.getElementById('passwordInput').value;
-            const errorMessage = document.getElementById('errorMessage');
-            if (passwordInput === correctPassword) {
-                document.getElementById('passwordPrompt').classList.remove('active');
-                document.getElementById('passwordPrompt').classList.add('hidden');
-                document.getElementById('mainContent').classList.add('active');
-                loadConversations();
+            const inputPassword = document.getElementById('password').value;
+            if (inputPassword === PASSWORD) {
+                document.getElementById('login').style.display = 'none';
+                document.getElementById('content').style.display = 'block';
+                fetchUsers();
             } else {
-                errorMessage.classList.remove('hidden');
+                alert('密码错误');
+            }
+        }
+
+        async function fetchUsers() {
+            try {
+                const response = await fetch('http://47.103.73.241/user/get-all-user');
+                const users = await response.json();
+                const userList = document.getElementById('userList');
+                users.forEach(user => {
+                    const li = document.createElement('li');
+                    li.className = 'list-group-item';
+                    li.innerText = `用户ID: ${user.id}`;
+                    li.onclick = () => fetchConversations(user.id);
+                    userList.appendChild(li);
+                });
+            } catch (error) {
+                console.error('Error fetching users:', error);
             }
         }
 
         async function fetchConversations(userId) {
-            const response = await fetch(`http://47.103.73.241/conversation/get-user-conversation-record?userId=${userId}`);
-            return response.json();
+            try {
+                const response = await fetch(`http://47.103.73.241/conversation/get-user-conversation-record?userId=${userId}`);
+                const conversations = await response.json();
+                const conversationList = document.getElementById('conversationList');
+                conversationList.innerHTML = '';
+                conversations.forEach(conversation => {
+                    const li = document.createElement('li');
+                    li.className = 'list-group-item';
+                    li.innerText = `对话ID: ${conversation.id} - AI回复次数: ${conversation.aiResponseCount}`;
+                    li.onclick = () => fetchConversationContent(conversation.id);
+                    conversationList.appendChild(li);
+                });
+            } catch (error) {
+                console.error('Error fetching conversations:', error);
+            }
         }
 
         async function fetchConversationContent(conversationId) {
-            const response = await fetch(`http://47.103.73.241/conversation/get-conversation-content?id=${conversationId}`);
-            return response.json();
-        }
-
-        function renderConversationList(conversations) {
-            const conversationList = document.getElementById('conversationList');
-            conversationList.innerHTML = '';
-            conversations.forEach(conversation => {
-                const listItem = document.createElement('li');
-                listItem.textContent = `对话ID: ${conversation.id} (AI回复次数: ${conversation.aiReplyCount})`;
-                listItem.addEventListener('click', () => showConversationContent(conversation.id));
-                conversationList.appendChild(listItem);
-            });
-        }
-
-        async function showConversationContent(conversationId) {
-            const content = await fetchConversationContent(conversationId);
-            const conversationContent = document.getElementById('conversationContent');
-            conversationContent.innerHTML = '';
-            content.forEach(message => {
-                const messageElement = document.createElement('p');
-                messageElement.textContent = `${message.sender}: ${message.text}`;
-                conversationContent.appendChild(messageElement);
-            });
-        }
-
-        async function loadConversations() {
-            const userId = 2; // 替换为实际用户ID
-            const conversations = await fetchConversations(userId);
-            renderConversationList(conversations);
+            try {
+                const response = await fetch(`http://47.103.73.241/conversation/get-conversation-content?id=${conversationId}`);
+                const content = await response.json();
+                const conversationContent = document.getElementById('conversationContent');
+                conversationContent.innerHTML = `<h4>对话内容</h4><pre>${JSON.stringify(content, null, 2)}</pre>`;
+            } catch (error) {
+                console.error('Error fetching conversation content:', error);
+            }
         }
     </script>
 </body>
